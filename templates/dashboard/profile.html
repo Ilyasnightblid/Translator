@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Mon Profil{% endblock %}
+{% block page_title %}Mon Profil{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-user"></i> Informations du profil</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Username section -->
+                        <div class="profile-section mb-4">
+                            <h6 class="section-title">Nom d'utilisateur</h6>
+                            <div class="mb-3">
+                                {{ form.username.label(class="form-label") }}
+                                {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else "")) }}
+                                {% if form.username.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.username.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <!-- Password section -->
+                        <div class="profile-section mb-4">
+                            <h6 class="section-title">Changer le mot de passe</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.current_password.label(class="form-label") }}
+                                        {{ form.current_password(class="form-control" + (" is-invalid" if form.current_password.errors else "")) }}
+                                        {% if form.current_password.errors %}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.current_password.errors %}{{ error }}{% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.new_password.label(class="form-label") }}
+                                        {{ form.new_password(class="form-control" + (" is-invalid" if form.new_password.errors else "")) }}
+                                        {% if form.new_password.errors %}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.new_password.errors %}{{ error }}{% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                {{ form.confirm_password.label(class="form-label") }}
+                                {{ form.confirm_password(class="form-control" + (" is-invalid" if form.confirm_password.errors else "")) }}
+                                {% if form.confirm_password.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.confirm_password.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i> 
+                                Laissez vide si vous ne souhaitez pas changer votre mot de passe
+                            </small>
+                        </div>
+                        
+                        <hr>
+                        
+                        <!-- Profile photo section -->
+                        <div class="profile-section mb-4">
+                            <h6 class="section-title">Photo de profil</h6>
+                            <div class="current-photo mb-3">
+                                <img src="{{ url_for('static', filename='images/default_avatar.png') if current_user.profile_photo == 'default_avatar.png' else url_for('static', filename='profile_photos/' + current_user.profile_photo) }}" 
+                                     alt="Photo de profil actuelle" 
+                                     class="current-avatar">
+                                <div class="photo-info">
+                                    <span class="photo-label">Photo actuelle</span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                {{ form.profile_photo.label(class="form-label") }}
+                                {{ form.profile_photo(class="form-control" + (" is-invalid" if form.profile_photo.errors else "")) }}
+                                {% if form.profile_photo.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.profile_photo.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="text-muted">
+                                    Formats acceptés: JPG, JPEG, PNG, GIF (Max: 16MB)
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Enregistrer les modifications
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-info-circle"></i> Informations du compte</h5>
+                </div>
+                <div class="card-body">
+                    <div class="account-info">
+                        <div class="info-item mb-3">
+                            <label class="info-label">Email :</label>
+                            <span class="info-value">{{ current_user.email }}</span>
+                        </div>
+                        <div class="info-item mb-3">
+                            <label class="info-label">Membre depuis :</label>
+                            <span class="info-value">{{ current_user.created_at.strftime('%d/%m/%Y') }}</span>
+                        </div>
+                        <div class="info-item mb-3">
+                            <label class="info-label">Nombre de traductions :</label>
+                            <span class="info-value">{{ current_user.translations.count() }}</span>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="quick-actions">
+                        <h6>Actions rapides</h6>
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('dashboard.history') }}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-history"></i> Voir l'historique
+                            </a>
+                            <a href="{{ url_for('dashboard.statistics') }}" class="btn btn-outline-info btn-sm">
+                                <i class="fas fa-chart-bar"></i> Voir les statistiques
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

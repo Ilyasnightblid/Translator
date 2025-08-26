@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Traduction de Fichiers{% endblock %}
+{% block page_title %}Traduction de Fichiers{% endblock %}
+
+{% block content %}
+<div class="file-translation-container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-file-upload"></i> Téléverser et Traduire un Fichier</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" id="fileTranslationForm">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-4">
+                            {{ form.target_language.label(class="form-label") }}
+                            {{ form.target_language(class="form-select") }}
+                        </div>
+                        
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-content">
+                                <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                <h5>Glissez-déposez votre fichier ici</h5>
+                                <p class="text-muted">ou cliquez pour sélectionner un fichier</p>
+                                <p class="small text-muted">Formats supportés: .txt, .json (Max: 16MB)</p>
+                                {{ form.file(class="file-input", id="fileInput") }}
+                            </div>
+                        </div>
+                        
+                        <div id="fileInfo" class="file-info" style="display: none;">
+                            <div class="alert alert-info">
+                                <i class="fas fa-file"></i>
+                                <span id="fileName"></span>
+                                <span id="fileSize" class="text-muted"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <button type="submit" id="translateFileBtn" class="btn btn-success" disabled>
+                                <i class="fas fa-language"></i> Traduire le fichier
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-info-circle"></i> Informations</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Formats supportés :</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-file-alt text-primary"></i> Fichiers texte (.txt)</li>
+                        <li><i class="fas fa-file-code text-warning"></i> Fichiers JSON (.json)</li>
+                    </ul>
+                    
+                    <hr>
+                    
+                    <h6>Fonctionnalités :</h6>
+                    <ul class="feature-list">
+                        <li>Détection automatique de la langue</li>
+                        <li>Préservation de la structure JSON</li>
+                        <li>Téléchargement du fichier traduit</li>
+                        <li>Sauvegarde automatique dans l'historique</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if translation %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-check-circle text-success"></i> Traduction terminée</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Texte original ({{ translation.source_language.upper() }}) :</h6>
+                            <div class="file-content-preview">
+                                {{ translation.original_text[:500] }}
+                                {% if translation.original_text|length > 500 %}...{% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Texte traduit ({{ translation.target_language.upper() }}) :</h6>
+                            <div class="file-content-preview">
+                                {{ translation.translated_text[:500] }}
+                                {% if translation.translated_text|length > 500 %}...{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if download_file %}
+                    <div class="text-center mt-3">
+                        <a href="{{ url_for('dashboard.download_file', filename=download_file) }}" 
+                           class="btn btn-primary">
+                            <i class="fas fa-download"></i> Télécharger le fichier traduit
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/file_translation.js') }}"></script>
+{% endblock %}

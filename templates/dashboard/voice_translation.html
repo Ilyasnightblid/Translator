@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Traduction Vocale{% endblock %}
+{% block page_title %}Traduction Vocale{% endblock %}
+
+{% block content %}
+<div class="voice-translation-container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-microphone"></i> Traduction Vocale en Temps Réel</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" id="voiceTranslationForm">
+                        {{ form.hidden_tag() }}
+                        {{ form.transcribed_text() }}
+                        
+                        <div class="mb-4">
+                            {{ form.target_language.label(class="form-label") }}
+                            {{ form.target_language(class="form-select") }}
+                        </div>
+                        
+                        <div class="voice-controls text-center mb-4">
+                            <button type="button" id="startRecording" class="btn btn-primary btn-lg">
+                                <i class="fas fa-microphone"></i> Commencer l'enregistrement
+                            </button>
+                            <button type="button" id="stopRecording" class="btn btn-danger btn-lg" style="display: none;">
+                                <i class="fas fa-stop"></i> Arrêter l'enregistrement
+                            </button>
+                        </div>
+                        
+                        <div class="voice-status mb-3">
+                            <div id="recordingStatus" class="alert alert-info" style="display: none;">
+                                <i class="fas fa-circle text-danger blink"></i> Enregistrement en cours...
+                            </div>
+                        </div>
+                        
+                        <div class="transcription-result mb-3">
+                            <label class="form-label">Texte transcrit :</label>
+                            <div id="transcribedText" class="form-control" style="min-height: 100px; background-color: #f8f9fa;">
+                                Cliquez sur "Commencer l'enregistrement" pour parler...
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" id="translateBtn" class="btn btn-success" disabled>
+                                <i class="fas fa-language"></i> Traduire
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-info-circle"></i> Instructions</h5>
+                </div>
+                <div class="card-body">
+                    <ol class="instructions-list">
+                        <li>Sélectionnez la langue de destination</li>
+                        <li>Cliquez sur "Commencer l'enregistrement"</li>
+                        <li>Parlez clairement dans votre microphone</li>
+                        <li>Cliquez sur "Arrêter l'enregistrement"</li>
+                        <li>Vérifiez la transcription</li>
+                        <li>Cliquez sur "Traduire"</li>
+                    </ol>
+                    
+                    <div class="alert alert-warning mt-3">
+                        <small><i class="fas fa-exclamation-triangle"></i> 
+                        Assurez-vous que votre navigateur a accès au microphone.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if translation %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-check-circle text-success"></i> Résultat de la traduction</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Texte original ({{ translation.source_language.upper() }}) :</h6>
+                            <div class="original-text">{{ translation.original_text }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Texte traduit ({{ translation.target_language.upper() }}) :</h6>
+                            <div class="translated-text">{{ translation.translated_text }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/voice_translation.js') }}"></script>
+{% endblock %}

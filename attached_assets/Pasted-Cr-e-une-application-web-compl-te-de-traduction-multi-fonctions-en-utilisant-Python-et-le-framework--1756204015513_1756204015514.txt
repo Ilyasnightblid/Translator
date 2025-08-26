@@ -1,0 +1,75 @@
+Crée une application web complète de traduction multi-fonctions en utilisant Python et le framework Flask. L'application doit avoir un design de type "dashboard" moderne, sécurisé, et centré sur l'utilisateur.
+
+1. Design Général et Interface Utilisateur (UI/UX)
+L'application doit avoir une mise en page en deux colonnes :
+
+Sidebar de Navigation (à gauche) : Une barre latérale fixe avec des icônes et les liens suivants :
+
+Traduction Vocale
+
+Traduction de Fichiers
+
+Mon Historique
+
+Statistiques
+
+Zone de Contenu Principal (à droite) : Cette zone affichera le contenu de la page sélectionnée dans la sidebar.
+
+Header (en haut à droite) : Doit afficher le nom et la photo de profil de l'utilisateur. En cliquant dessus, un menu déroulant apparaît avec les options "Mon Profil" et "Déconnexion".
+
+2. Module de Gestion du Profil Utilisateur (Nouvelle Page)
+Accès : Accessible via le menu déroulant dans le header.
+
+Fonctionnalités : La page doit contenir des formulaires distincts pour :
+
+Changer le nom d'utilisateur.
+
+Changer le mot de passe (avec des champs pour l'ancien mot de passe, le nouveau, et la confirmation du nouveau).
+
+Uploader une photo de profil : Permettre à l'utilisateur de choisir un fichier image sur son ordinateur et de le téléverser.
+
+Backend : Toutes ces modifications doivent être sauvegardées de manière sécurisée dans la base de données pour l'utilisateur connecté.
+
+3. Module d'Authentification
+Pages dédiées : Créer des pages simples pour l'inscription et la connexion des utilisateurs.
+
+Sécurité : Les mots de passe doivent être hachés.
+
+4. Page de Traduction Vocale en Temps Réel
+Interface de Capture : Un bouton "Commencer l'enregistrement" qui utilise la Web Speech API du navigateur pour capturer la voix de manière fiable.
+
+Traduction : L'utilisateur choisit une langue cible dans une liste déroulante. Le texte transcrit est ensuite traduit.
+
+Sauvegarde : La traduction est automatiquement sauvegardée dans l'historique de l'utilisateur.
+
+5. Page de Traduction de Fichiers (Drag & Drop)
+Zone d'Upload : Une zone claire où l'utilisateur peut glisser-déposer un fichier (.txt ou .json).
+
+Détection et Traduction : La langue du fichier est détectée automatiquement. L'utilisateur choisit la langue cible.
+
+Téléchargement : L'utilisateur peut télécharger le fichier traduit dans son format d'origine. La traduction est aussi sauvegardée dans l'historique.
+
+6. Page "Mon Historique"
+Affichage : Un tableau clair listant toutes les traductions (vocales et fichiers) de l'utilisateur.
+
+Gestion : L'utilisateur doit pouvoir modifier (corriger une erreur) ou supprimer des entrées de son historique.
+
+Export en CSV : Un bouton "Télécharger en CSV" pour exporter l'historique complet.
+
+7. Page "Statistiques"
+Affiche des statistiques pour l'utilisateur connecté :
+
+Nombre total de traductions.
+
+Répartition en pourcentage (vocal vs. fichier).
+
+Les 3 langues les plus utilisées.
+
+8. Instructions Techniques et Fichier README
+Backend : Utilise Python avec Flask et Flask-SQLAlchemy.
+
+Base de Données : Utilise SQLite et implémente Flask-Migrate. Important : Le modèle User dans la base de données doit inclure un champ pour stocker le chemin du fichier de la photo de profil.
+
+Frontend : Utilise HTML, CSS et du JavaScript moderne.
+
+Fichier README.md (Très Important) : Génère un fichier README.md très détaillé avec une section "Comment Lancer en Local", expliquant étape par étape comment installer et lancer le projet, incluant les commandes pour créer la base de données (flask db upgrade) et lancer le serveur (flask run).

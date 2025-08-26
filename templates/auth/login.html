@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Connexion - Traducteur{% endblock %}
+
+{% block auth_content %}
+<div class="auth-form-container">
+    <div class="auth-form">
+        <div class="auth-header">
+            <h2><i class="fas fa-language"></i> Traducteur Multi-Fonctions</h2>
+            <p>Connectez-vous à votre compte</p>
+        </div>
+        
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="mb-3">
+                {{ form.username.label(class="form-label") }}
+                {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else "")) }}
+                {% if form.username.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.username.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else "")) }}
+                {% if form.password.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.password.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100 mb-3">
+                <i class="fas fa-sign-in-alt"></i> Se connecter
+            </button>
+        </form>
+        
+        <div class="auth-footer">
+            <p>Pas encore de compte ? <a href="{{ url_for('auth.register') }}">S'inscrire</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

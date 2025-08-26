@@ -1,0 +1,55 @@
+Je veux effectuer une mise à jour de débogage critique et de finalisation de mon application de traduction. La priorité absolue est de corriger les bugs existants et de générer un guide d'installation local parfait.
+
+---
+### 1. Débogage Prioritaire : Correction des Bugs Majeurs
+Le code actuel contient plusieurs bugs qui empêchent l'utilisation normale de l'application. Je veux que tu les corriges en priorité.
+
+* **Bug 1 : Le Thème Sombre (Dark Mode) ne fonctionne pas.**
+    * **Problème :** Cliquer sur l'interrupteur du thème sombre ne produit aucun effet visuel. L'interface reste en mode clair.
+    * **Action Requise :** Vérifie le code JavaScript. Assure-toi que l'événement "click" est bien détecté, que la classe `dark-mode` est correctement ajoutée ou retirée de l'élément `<body>`, et que le `localStorage` est utilisé pour sauvegarder le choix de l'utilisateur. Vérifie également que le fichier CSS contient bien les styles pour la classe `.dark-mode`.
+
+* **Bug 2 : La mise à jour du Profil Utilisateur est cassée.**
+    * **Problème :** L'upload d'une nouvelle photo de profil ne fonctionne pas. L'image ne s'affiche pas après le téléversement. Les autres modifications (nom, mot de passe) peuvent aussi être défectueuses.
+    * **Action Requise :**
+        1.  **Pour la photo :** Analyse la route Flask qui gère l'upload. Assure-toi que le fichier est bien sauvegardé sur le serveur (dans un dossier `static/uploads` par exemple), que le chemin du fichier est correctement enregistré dans la base de données pour l'utilisateur, et que l'interface se met à jour pour afficher la nouvelle image.
+        2.  **Pour le nom/mot de passe :** Vérifie les formulaires et les routes correspondantes pour t'assurer que les nouvelles informations sont bien validées et sauvegardées dans la base de données.
+
+---
+### 2. Génération d'un Fichier `README.md` Ultra-Détaillé
+Ceci est une étape cruciale. Je veux un fichier `README.md` qui soit un guide complet pour installer et lancer ce projet sur un ordinateur local (Windows, macOS, ou Linux).
+
+Le fichier `README.md` doit contenir les sections suivantes :
+
+* **Introduction :** Une brève description du projet.
+* **Prérequis :**
+    * Python 3.9 ou supérieur.
+    * L'outil de gestion de paquets `pip`.
+* **Instructions d'Installation Locale (Étape par Étape) :**
+    1.  `git clone [URL_DU_PROJET]`
+    2.  `cd [NOM_DU_DOSSIER]`
+    3.  `python -m venv venv`
+    4.  `source venv/bin/activate` (pour Mac/Linux) ou `.\venv\Scripts\Activate.ps1` (pour Windows)
+    5.  `pip install -r requirements.txt`
+* **Configuration de la Base de Données :**
+    * Expliquer que le projet utilise SQLite.
+    * Donner la commande exacte pour créer la base de données pour la première fois : `flask db upgrade`.
+* **Lancement de l'Application :**
+    * Donner la commande pour démarrer le serveur de développement : `flask run`.
+    * Préciser que l'application sera accessible à l'adresse `http://127.0.0.1:5000`.
+* **Liste Complète des Dépendances (`requirements.txt`) :**
+    * Crée un fichier `requirements.txt` avec la liste EXACTE des bibliothèques Python et leurs versions. Par exemple :
+        ```
+        Flask==2.2.2
+        Flask-SQLAlchemy==2.5.1
+        Flask-Migrate==3.1.0
+        Flask-Login==0.6.2
+        Werkzeug==2.2.2
+        python-dotenv==0.21.0
+        requests==2.28.1
+        # Ajoute ici toutes les autres bibliothèques nécessaires...
+        ```
+
+---
+### 3. Vérification Finale
+* **Consistance :** Assure-toi que toutes les fonctionnalités (anciennes et nouvelles) fonctionnent correctement après les corrections.
+* **Qualité du Code :** Le code doit être propre, commenté et facile à comprendre.

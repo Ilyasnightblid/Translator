@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Traduction de Texte{% endblock %}
+{% block page_title %}Traduction de Texte{% endblock %}
+
+{% block content %}
+<div class="text-translation-container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-keyboard"></i> Traduire du Texte Écrit</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" id="textTranslationForm">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-4">
+                            {{ form.target_language.label(class="form-label") }}
+                            {{ form.target_language(class="form-select") }}
+                            {% if form.target_language.errors %}
+                                <div class="text-danger mt-2">
+                                    {% for error in form.target_language.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ form.source_text.label(class="form-label") }}
+                            {{ form.source_text(class="form-control") }}
+                            {% if form.source_text.errors %}
+                                <div class="text-danger mt-2">
+                                    {% for error in form.source_text.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-language"></i> Traduire le texte
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-info-circle"></i> Instructions</h5>
+                </div>
+                <div class="card-body">
+                    <ol class="instructions-list">
+                        <li>Sélectionnez la langue de destination</li>
+                        <li>Tapez ou collez votre texte dans la zone de texte</li>
+                        <li>Cliquez sur "Traduire le texte"</li>
+                        <li>La traduction sera automatiquement sauvegardée</li>
+                    </ol>
+                    
+                    <div class="alert alert-info mt-3">
+                        <small><i class="fas fa-info-circle"></i> 
+                        La langue source sera détectée automatiquement.</small>
+                    </div>
+                    
+                    <h6 class="mt-4">Fonctionnalités :</h6>
+                    <ul class="feature-list">
+                        <li>Détection automatique de la langue</li>
+                        <li>Prise en charge de textes longs</li>
+                        <li>Sauvegarde automatique dans l'historique</li>
+                        <li>Copier-coller depuis d'autres applications</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if translation %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-check-circle text-success"></i> Résultat de la traduction</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Texte original ({{ translation.source_language.upper() }}) :</h6>
+                            <div class="original-text">{{ translation.original_text }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Texte traduit ({{ translation.target_language.upper() }}) :</h6>
+                            <div class="translated-text">{{ translation.translated_text }}</div>
+                            <div class="mt-3">
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="copyToClipboard('{{ translation.translated_text|replace("'", "\\'") }}')">
+                                    <i class="fas fa-copy"></i> Copier la traduction
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        // Créer une notification temporaire
+        const notification = document.createElement('div');
+        notification.className = 'alert alert-success alert-dismissible fade show position-fixed';
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; max-width: 300px;';
+        notification.innerHTML = `
+            <i class="fas fa-check"></i> Traduction copiée !
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.body.appendChild(notification);
+        
+        // Auto-remove après 3 secondes
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 3000);
+    }).catch(function() {
+        alert('Erreur lors de la copie. Veuillez sélectionner et copier manuellement.');
+    });
+}
+
+// Auto-resize textarea based on content
+document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.querySelector('#source_text');
+    if (textarea) {
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    }
+});
+</script>
+{% endblock %}

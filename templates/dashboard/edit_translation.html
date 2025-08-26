@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Modifier la traduction{% endblock %}
+{% block page_title %}Modifier la traduction{% endblock %}
+
+{% block content %}
+<div class="edit-translation-container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-edit"></i> Modifier la traduction</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-4">
+                            <h6>Texte original ({{ translation.source_language.upper() }}) :</h6>
+                            <div class="original-text-display">
+                                {{ translation.original_text }}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ form.translated_text.label(class="form-label") }}
+                            {{ form.translated_text(class="form-control", rows="8") }}
+                            {% if form.translated_text.errors %}
+                                <div class="text-danger mt-2">
+                                    {% for error in form.translated_text.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('dashboard.history') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Retour à l'historique
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Enregistrer les modifications
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-info-circle"></i> Détails de la traduction</h5>
+                </div>
+                <div class="card-body">
+                    <div class="translation-details">
+                        <div class="detail-item mb-3">
+                            <label class="detail-label">Type :</label>
+                            <span class="detail-value">
+                                {% if translation.translation_type == 'voice' %}
+                                <i class="fas fa-microphone text-primary"></i> Traduction vocale
+                                {% else %}
+                                <i class="fas fa-file text-info"></i> Traduction de fichier
+                                {% endif %}
+                            </span>
+                        </div>
+                        
+                        <div class="detail-item mb-3">
+                            <label class="detail-label">Langues :</label>
+                            <span class="detail-value">
+                                {{ translation.source_language.upper() }} → {{ translation.target_language.upper() }}
+                            </span>
+                        </div>
+                        
+                        <div class="detail-item mb-3">
+                            <label class="detail-label">Date de création :</label>
+                            <span class="detail-value">{{ translation.created_at.strftime('%d/%m/%Y %H:%M') }}</span>
+                        </div>
+                        
+                        {% if translation.updated_at != translation.created_at %}
+                        <div class="detail-item mb-3">
+                            <label class="detail-label">Dernière modification :</label>
+                            <span class="detail-value">{{ translation.updated_at.strftime('%d/%m/%Y %H:%M') }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if translation.filename %}
+                        <div class="detail-item mb-3">
+                            <label class="detail-label">Fichier :</label>
+                            <span class="detail-value">{{ translation.filename }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+Je veux effectuer une mise à jour importante de mon application de traduction pour corriger un bug critique et ajouter de nouvelles fonctionnalités très demandées.
+
+1. Débogage Prioritaire : Erreur sur la Page des Statistiques
+Problème : La page "Statistiques" renvoie une erreur "Internal Server Error" et n'affiche aucune donnée.
+
+Action Requise : Analyse en priorité la route Flask et la logique backend correspondante à la page des statistiques. Vérifie les points suivants :
+
+Les requêtes à la base de données pour récupérer l'historique sont correctes.
+
+Le code gère correctement le cas où un utilisateur n'a encore aucune traduction (pour éviter les erreurs de division par zéro ou les objets vides).
+
+Corrige le bug pour que les statistiques s'affichent de manière fiable.
+
+2. Nouvelle Fonctionnalité Majeure : Traduction de Texte Manuscrit
+Objectif : Ajouter un mode de traduction simple pour du texte écrit.
+
+Intégration UI : Ajoute un nouveau lien "Traduction de Texte" dans la sidebar de navigation, juste en dessous de "Traduction Vocale".
+
+Design de la Page : La nouvelle page doit contenir :
+
+Une grande zone de texte (<textarea>) où l'utilisateur peut écrire ou coller du texte.
+
+Une liste déroulante pour choisir la langue cible.
+
+Un bouton "Traduire".
+
+Une zone où le résultat de la traduction s'affichera.
+
+Logique Backend : Le texte est envoyé au backend, traduit, et le résultat est renvoyé. La traduction doit également être sauvegardée dans l'historique de l'utilisateur, identifiée comme une traduction de type "Texte".
+
+3. Nouvelle Fonctionnalité Globale : Thème Sombre (Dark Mode)
+Objectif : Permettre à l'utilisateur de choisir entre un thème clair et un thème sombre.
+
+Intégration UI : Ajoute un interrupteur (toggle switch) dans le header, à côté du profil utilisateur, pour basculer instantanément entre les deux modes.
+
+Implémentation Technique :
+
+Utilise des variables CSS pour les couleurs afin de faciliter le changement de thème.
+
+Utilise du JavaScript pour ajouter/retirer une classe (ex: dark-mode) sur l'élément <body> de la page.
+
+Utilise le localStorage du navigateur pour mémoriser le choix du thème de l'utilisateur, afin qu'il persiste lorsqu'il recharge la page ou revient plus tard.
+
+4. Mises à Jour Générales et Instructions
+Consistance du Design : Assure-toi que la nouvelle page "Traduction de Texte" et le nouveau toggle de thème s'intègrent parfaitement dans le design existant du dashboard.
+
+Mise à jour du README : Vérifie que le fichier README.md est toujours à jour avec les instructions d'installation locale.
+
+Périmètre : Toutes les autres fonctionnalités (profil, historique, traduction vocale/fichier) doivent continuer à fonctionner comme avant.

@@ -22,7 +22,24 @@ def create_app():
     
     # Configuration
     app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key-change-in-production")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///translation_app.db")
+    
+    # --- DEBUT DE LA MODIFICATION POUR LE DEPLOIEMENT ---
+    # Configuration intelligente de la base de données
+    if 'PYTHONANYWHERE_USER' in os.environ:
+        # Chemin absolu et complet pour le serveur PythonAnywhere
+        db_path = f"/home/{os.environ['PYTHONANYWHERE_USER']}/Translator/instance/translation_app.db"
+        # Crée le dossier 'instance' sur le serveur s'il n'existe pas
+        os.makedirs(f"/home/{os.environ['PYTHONANYWHERE_USER']}/Translator/instance", exist_ok=True)
+    else:
+        # Chemin relatif qui fonctionne sur ton PC local
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        # Crée le dossier 'instance' localement s'il n'existe pas
+        os.makedirs(os.path.join(basedir, 'instance'), exist_ok=True)
+        db_path = os.path.join(basedir, 'instance', 'translation_app.db')
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+    # --- FIN DE LA MODIFICATION POUR LE DEPLOIEMENT ---
+
     app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
         "pool_recycle": 300,
         "pool_pre_ping": True,

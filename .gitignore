@@ -1,0 +1,23 @@
+# Environnement virtuel
+venv/
+.venv/
+
+# Fichiers de configuration locaux
+.env
+*.local
+
+# Base de données
+instance/
+*.db
+*.sqlite3
+
+# Fichiers générés par Python
+__pycache__/
+*.pyc
+
+# Fichiers uploadés par les utilisateurs
+uploads/
+static/profile_photos/
+
+# Fichiers de test
+result_test.json

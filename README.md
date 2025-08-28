@@ -28,8 +28,8 @@ Cette application Flask offre une solution complète de traduction avec une inte
 ### 1. Cloner le Projet
 
 ```bash
-git clone <URL_DU_PROJET>
-cd <NOM_DU_DOSSIER>
+git clone https://github.com/Ilyasnightblid/Translator.git
+cd Translator
 ```
 
 ### 2. Créer un Environnement Virtuel

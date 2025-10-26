@@ -10,7 +10,7 @@ from werkzeug.security import check_password_hash
 from app import db
 from models import User, Translation
 from forms import LoginForm, RegisterForm, ProfileForm, VoiceTranslationForm, FileTranslationForm, EditTranslationForm, TextTranslationForm
-from utils import translate_text, detect_language, allowed_file
+from utils import translate_text, detect_language, allowed_file, upload_to_blob, delete_blob
 
 # Create blueprints
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -277,57 +277,70 @@ def statistics():
     stats = current_user.get_translation_stats()
     recent_translations = current_user.translations.order_by(Translation.created_at.desc()).limit(5).all()
     return render_template('dashboard/statistics.html', stats=stats, recent_translations=recent_translations)
-
 @dashboard_bp.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
     form = ProfileForm(obj=current_user)
-    
+
+    # URL par défaut pour comparaison (doit correspondre à models.py)
+    DEFAULT_AVATAR_URL = "https://translatorstorageilyas.blob.core.windows.net/profile-photos/default_avatar.png"
+
     if form.validate_on_submit():
-        # Check if username is being changed and if it's already taken
+        # Vérification du nom d'utilisateur (votre code)
         if form.username.data != current_user.username:
             existing_user = User.query.filter_by(username=form.username.data).first()
             if existing_user:
                 flash('Ce nom d\'utilisateur est déjà utilisé.', 'error')
                 return render_template('dashboard/profile.html', form=form)
-        
-        # Update username
+
+        # Update username (votre code)
         current_user.username = form.username.data
-        
-        # Update password if provided
+
+        # Update mot de passe (votre code)
         if form.new_password.data:
             if not form.current_password.data:
                 flash('Veuillez saisir votre mot de passe actuel pour le changer.', 'error')
                 return render_template('dashboard/profile.html', form=form)
-            
+
             if not current_user.check_password(form.current_password.data):
                 flash('Mot de passe actuel incorrect.', 'error')
                 return render_template('dashboard/profile.html', form=form)
-            
+
             current_user.set_password(form.new_password.data)
-        
+
+        # --- BLOC MODIFIÉ POUR AZURE ---
         # Handle profile photo upload
         if form.profile_photo.data:
             file = form.profile_photo.data
             if file and allowed_file(file.filename, ['jpg', 'jpeg', 'png', 'gif']):
                 filename = secure_filename(file.filename)
                 timestamp = datetime.now().strftime('%Y%m%d_%H%M%S_')
-                filename = f"{current_user.id}_{timestamp}{filename}"
-                filepath = os.path.join(current_app.config['PROFILE_PHOTOS_FOLDER'], filename)
-                file.save(filepath)
-                
-                # Remove old profile photo if it's not the default
-                if current_user.profile_photo != 'default_avatar.png':
-                    old_photo_path = os.path.join(current_app.config['PROFILE_PHOTOS_FOLDER'], current_user.profile_photo)
-                    if os.path.exists(old_photo_path):
-                        os.remove(old_photo_path)
-                
-                current_user.profile_photo = filename
-        
+
+                # Créez un nom de blob unique (le nom du fichier dans le cloud)
+                blob_name = f"{current_user.id}_{timestamp}{filename}"
+
+                # Uploadez le flux du fichier (file.data.stream) vers Azure
+                # "profile-photos" est le nom de votre conteneur
+                file_url = upload_to_blob(file.data.stream, "profile-photos", blob_name)
+
+                if file_url:
+                    # Si l'upload réussit, supprimez l'ancienne photo
+                    # (sauf si c'est la photo par défaut)
+                    if current_user.profile_photo != DEFAULT_AVATAR_URL:
+                        delete_blob("profile-photos", current_user.profile_photo)
+
+                    # Enregistrez la NOUVELLE URL COMPLÈTE dans la BDD
+                    current_user.profile_photo = file_url
+                else:
+                    flash('Erreur lors du téléversement de la photo vers Azure.', 'danger')
+            else:
+                flash('Type de fichier photo non autorisé.', 'error')
+        # --- FIN DU BLOC MODIFIÉ ---
+
         db.session.commit()
         flash('Profil mis à jour avec succès!', 'success')
         return redirect(url_for('dashboard.profile'))
-    
+
     return render_template('dashboard/profile.html', form=form)
 
 def register_blueprints(app):

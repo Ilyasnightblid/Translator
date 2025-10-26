@@ -28,12 +28,12 @@ def create_app():
         "pool_pre_ping": True,
     }
     app.config["UPLOAD_FOLDER"] = "uploads"
-    app.config["PROFILE_PHOTOS_FOLDER"] = "static/profile_photos"
+    #app.config["PROFILE_PHOTOS_FOLDER"] = "static/profile_photos"
     app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB max file size
     
     # Create upload directories
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
-    os.makedirs(app.config["PROFILE_PHOTOS_FOLDER"], exist_ok=True)
+    #os.makedirs(app.config["PROFILE_PHOTOS_FOLDER"], exist_ok=True)
     
     # ProxyFix for HTTPS
     app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)

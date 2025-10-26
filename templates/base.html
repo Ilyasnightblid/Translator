@@ -77,8 +77,7 @@
                         </div>
                         <div class="user-menu dropdown">
                             <a href="#" class="user-toggle dropdown-toggle" data-bs-toggle="dropdown">
-                            <img src="{{ url_for('static', filename='images/default_avatar.png') if current_user.profile_photo == 'default_avatar.png' else url_for('static', filename='profile_photos/' + current_user.profile_photo) }}" 
-                                 alt="Photo de profil" class="user-avatar">
+                                <img src="{{ current_user.profile_photo }}" alt="Photo de profil" class="user-avatar">
                             <span class="user-name">{{ current_user.username }}</span>
                             <i class="fas fa-chevron-down"></i>
                         </a>

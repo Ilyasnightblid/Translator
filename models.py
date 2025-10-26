@@ -9,7 +9,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
     # Augmenté à 512 pour stocker les URL complètes
-profile_photo = db.Column(db.String(512), nullable=False, default='https://translatorstorageilyas.blob.core.windows.net/profile-photos/default_avatar.png')
+    profile_photo = db.Column(db.String(512), nullable=False, default='https://translatorstorageilyas.blob.core.windows.net/profile-photos/default_avatar.png')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relationship with translations
